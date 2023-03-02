@@ -4,6 +4,7 @@ import Home from './components/Home.js';
 import Chat from './components/Chat.js';
 import About from './components/About';
 import Contact from './components/Contact';
+import Eotp from './components/Eotp.js';
 // import UploadFile from './components/UploadFile.js';
 import './App.css';
 
@@ -31,10 +32,11 @@ class App extends Component {
             <Route exact path='/chat' element={< Chat />}></Route>
             <Route exact path='/about' element={< About />}></Route>
             <Route exact path='/contact' element={< Contact />}></Route>
+            <Route exact path='/Eotp' element={<Eotp />}></Route>
             {/* <Route exact path='/file' element={< UploadFile />}></Route> */}
           </Routes>
         </div>
-      </Router>
+      </Router >
     );
   }
 }
