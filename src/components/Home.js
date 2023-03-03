@@ -4,7 +4,7 @@ import '../App.css'
 import { useNavigate } from "react-router-dom";
 import { Navigate } from 'react-router-dom';
 import swal from 'sweetalert';
-import Test from './Test';
+
 function Home() {
 
 
@@ -15,7 +15,43 @@ function Home() {
     const [display, setDisplay] = useState("yogeshhidden");
 
     let navigate = useNavigate();
-    function apicall2() {
+
+    function sendOtp2() {
+        let fmob = `+91${mob}`;
+        let data = {
+            "originator": "SignOTP",
+            "recipient": `${fmob}`,
+            "content": "Greetings from SimpleCrew, your mobile verification code is: {}",
+            "expiry": "600",
+            "data_coding": "text"
+        }
+        console.log(fmob);
+
+        console.log(typeof mob)
+        const options2 = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoLWJhY2tlbmQ6YXBwIiwic3ViIjoiNWFkNjIzNzUtYjNmYS00OTBlLWE0ZWMtNzNlYThhZGE2ODMyIn0.M1ecWx7Qakshhr40vjTXx7Comddy-faEVAEVMZg0jXU',
+                'X-RapidAPI-Key': 'a1bcdf2ca7msh3d6d7f7704dc9e2p1aaeb7jsn64444f4d05ff',
+                'X-RapidAPI-Host': 'd7sms.p.rapidapi.com'
+            },
+            body: JSON.stringify(data)
+        };
+
+        fetch('https://d7sms.p.rapidapi.com/verify/v1/otp/send-otp', options2)
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+                console.log(response.otp_id);
+                console.log(response.status);
+                setReqid(response.otp_id);
+            })
+            .catch(err => console.error(err));
+
+    }
+
+    function submitOtp() {
         // 27053be9-aafc-4dad-8ef0-3c395a01dd8f
         console.log("apicall2");
         let data = {
@@ -26,7 +62,7 @@ function Home() {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoLWJhY2tlbmQ6YXBwIiwic3ViIjoiMTEzNmZkZWEtNWVjNy00MWU2LWJkMmYtN2YyMGM5ZTZiMTI3In0.wFFNMpdDov3RmHvTyAxAlfSjpwn7_C7J6NNIGcFT2aE',
+                Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoLWJhY2tlbmQ6YXBwIiwic3ViIjoiNWFkNjIzNzUtYjNmYS00OTBlLWE0ZWMtNzNlYThhZGE2ODMyIn0.M1ecWx7Qakshhr40vjTXx7Comddy-faEVAEVMZg0jXU',
                 'X-RapidAPI-Key': 'a1bcdf2ca7msh3d6d7f7704dc9e2p1aaeb7jsn64444f4d05ff',
                 'X-RapidAPI-Host': 'd7sms.p.rapidapi.com'
             },
@@ -40,12 +76,15 @@ function Home() {
                 console.log(response.status);
                 if (response.status == "APPROVED")
                     navigate("/Chat");
+                else
+                    console.log("error in otp");
+                swal("Error!", "Please enter Vaild OTP", "error");
 
             })
             .catch(err => console.error(err));
     }
 
-    function apicall() {
+    function sendOtp() {
         console.log("api call");
         console.log(typeof mob);
         const lstd = Math.ceil(Math.log10(mob + 1)) - 1;
@@ -53,72 +92,44 @@ function Home() {
         console.log(mob);
         console.log(mob.slice(7, 10));
 
-        setDisplay("yogeshblock");
-        // const encodedParams = new URLSearchParams();
-        // encodedParams.append("txn_id", "17c6fa41-778f-49c1-a80a-cfaf7fae2fb8");
-        // encodedParams.append("consent", "Y");
-        // encodedParams.append("uidnumber", adh);
-        // encodedParams.append("clientid", "222");
-        // encodedParams.append("method", "uidvalidatev2");
 
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/x-www-form-urlencoded',
-        //         'X-RapidAPI-Key': 'a1bcdf2ca7msh3d6d7f7704dc9e2p1aaeb7jsn64444f4d05ff',
-        //         'X-RapidAPI-Host': 'verifyaadhaarnumber.p.rapidapi.com'
-        //     },
-        //     body: encodedParams
-        // };
+        const encodedParams = new URLSearchParams();
+        encodedParams.append("txn_id", "17c6fa41-778f-49c1-a80a-cfaf7fae2fb8");
+        encodedParams.append("consent", "Y");
+        encodedParams.append("uidnumber", adh);
+        encodedParams.append("clientid", "222");
+        encodedParams.append("method", "uidvalidatev2");
 
-        // fetch('https://verifyaadhaarnumber.p.rapidapi.com/Uidverifywebsvcv1/VerifyAadhaarNumber', options)
-        //     .then(response => response.json())
-        //     .then(response => {
-        //         console.log(response);
-        //         console.log(response.Succeeded.Uid_Details.Data.verified);
-        //         console.log(response.Succeeded.Uid_Details.Data.mobile_number);
-        //         console.log(typeof response.Succeeded.Uid_Details.Data.mobile_number);
-        //         console.log(response.Succeeded.Uid_Details.Data.mobile_number.slice(7, 10));
-        //         if (response.Succeeded.Uid_Details.Data.mobile_number.slice(7, 10) != mob.slice(7, 10)) {
-        //             swal("Error!", "Please enter correct details", "error");
-        //         }
-        //         else {
-        //             console.log("details are correct");
-        //         }
+        const options = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'X-RapidAPI-Key': 'a1bcdf2ca7msh3d6d7f7704dc9e2p1aaeb7jsn64444f4d05ff',
+                'X-RapidAPI-Host': 'verifyaadhaarnumber.p.rapidapi.com'
+            },
+            body: encodedParams
+        };
 
-        //     })
-        //     .catch(err => console.error(err));
-        let fmob = `+91${mob}`;
-        let data = {
-            "originator": "SignOTP",
-            "recipient": `${fmob}`,
-            "content": "Greetings from Right, your mobile verification code is: {}",
-            "expiry": "600",
-            "data_coding": "text"
-        }
-        console.log(fmob);
+        fetch('https://verifyaadhaarnumber.p.rapidapi.com/Uidverifywebsvcv1/VerifyAadhaarNumber', options)
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+                console.log(response.Succeeded.Uid_Details.Data.verified);
+                console.log(response.Succeeded.Uid_Details.Data.mobile_number);
+                console.log(typeof response.Succeeded.Uid_Details.Data.mobile_number);
+                console.log(response.Succeeded.Uid_Details.Data.mobile_number.slice(7, 10));
+                if (response.Succeeded.Uid_Details.Data.mobile_number.slice(7, 10) != mob.slice(7, 10)) {
+                    swal("Error!", "Please enter correct details", "error");
+                }
 
-        console.log(typeof mob)
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoLWJhY2tlbmQ6YXBwIiwic3ViIjoiMTEzNmZkZWEtNWVjNy00MWU2LWJkMmYtN2YyMGM5ZTZiMTI3In0.wFFNMpdDov3RmHvTyAxAlfSjpwn7_C7J6NNIGcFT2aE',
-        //         'X-RapidAPI-Key': 'a1bcdf2ca7msh3d6d7f7704dc9e2p1aaeb7jsn64444f4d05ff',
-        //         'X-RapidAPI-Host': 'd7sms.p.rapidapi.com'
-        //     },
-        //     body: JSON.stringify(data)
-        // };
+                else {
+                    setDisplay("yogeshblock");
+                    console.log("details are correct");
+                    sendOtp2();
+                }
 
-        // fetch('https://d7sms.p.rapidapi.com/verify/v1/otp/send-otp', options)
-        //     .then(response => response.json())
-        //     .then(response => {
-        //         console.log(response);
-        //         console.log(response.otp_id);
-        //         console.log(response.status);
-        //         setReqid(response.otp_id);
-        //     })
-        //     .catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));
 
 
     }
@@ -158,7 +169,7 @@ function Home() {
             </div>
             <button className="btn block-cube block-cube-hover" type="button"
                 onClick={() => {
-                    apicall();
+                    sendOtp();
                 }}>
                 <div className="bg-top">
                     <div className="bg-inner" />
@@ -170,7 +181,7 @@ function Home() {
                     <div className="bg-inner" />
                 </div>
                 <div className="text" >
-                    Log In
+                    Send OTP
                 </div>
             </button>
             <div className={display}>
@@ -190,7 +201,7 @@ function Home() {
 
                 <button className="btn block-cube block-cube-hover" type="button"
                     onClick={() => {
-                        apicall2();
+                        submitOtp();
                     }}>
                     <div className="bg-top">
                         <div className="bg-inner" />
@@ -207,9 +218,7 @@ function Home() {
                 </button>
             </div>
             <div className="credits">
-                <a href="https://codepen.io/marko-zub/" target="_blank">
-                    My other codepens
-                </a>
+
             </div>
         </form>
 
